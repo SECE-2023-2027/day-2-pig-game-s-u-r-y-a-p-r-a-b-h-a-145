@@ -39,7 +39,7 @@ A 2-player interactive game where players take turns rolling a dice to accumulat
 
 ## 🤔 Guess My Number
 
-### 🔗 Live Demo: *[Add your GitHub Pages link here]*
+
 
 ### 📌 Description:
 A single-player number guessing game between 1 and 20. The player tries to guess the secret number with clues and a score counter.
@@ -67,6 +67,13 @@ A single-player number guessing game between 1 and 20. The player tries to guess
 
 
 ---
+
+You can clone and run this project locally:
+
+```bash
+git clone [https://github.com/your-username/js-game-projects.git
+cd js-game-projects](https://github.com/SECE-2023-2027/day-2-pig-game-s-u-r-y-a-p-r-a-b-h-a-145)
+open index.html  # or open in your browser
 
 
 
