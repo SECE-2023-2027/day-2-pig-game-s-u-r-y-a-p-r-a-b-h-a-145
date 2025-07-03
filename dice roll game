@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dice Game</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(to right, #f06292, #ec407a);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    main {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 40px;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 90%;
+      max-width: 800px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .players {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      gap: 30px;
+    }
+
+    .player {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 15px;
+      padding: 20px;
+      flex: 1;
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    .player--active {
+      background-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 10px #fff;
+    }
+
+    .player--winner {
+      background-color: #4caf50 !important;
+    }
+
+    .name {
+      font-size: 1.5rem;
+      margin: 10px 0;
+      color: #fff;
+    }
+
+    .score {
+      font-size: 3rem;
+      margin: 10px 0;
+      color: #ffccdd;
+    }
+
+    .current {
+      background-color: #f06292;
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 15px;
+      color: white;
+    }
+
+    .current-lable {
+      font-weight: bold;
+      font-size: 1rem;
+      margin-bottom: 5px;
+    }
+
+    .current-score {
+      font-size: 1.5rem;
+    }
+
+    .dice {
+      margin: 30px 0;
+      width: 80px;
+      transition: transform 0.3s;
+    }
+
+    .roll {
+      animation: roll 0.3s;
+    }
+
+    @keyframes roll {
+      0% { transform: rotate(0deg); }
+      50% { transform: rotate(360deg); }
+      100% { transform: rotate(720deg); }
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      margin: 5px;
+      border-radius: 20px;
+      background-color: white;
+      color: #ec407a;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn:hover {
+      background-color: #ffc1e3;
+    }
+  </style>
+</head>
+<body>
+
+<main>
+  <div class="players">
+    <section class="player player--0 player--active" id="player--0">
+      <h2 class="name" id="name--0">Player 1</h2>
+      <p class="score" id="score--0">0</p>
+      <div class="current">
+        <p class="current-lable">Current</p>
+        <p class="current-score" id="current--0">0</p>
+      </div>
+    </section>
+    <section class="player player--1" id="player--1">
+      <h2 class="name" id="name--1">Player 2</h2>
+      <p class="score" id="score--1">0</p>
+      <div class="current">
+        <p class="current-lable">Current</p>
+        <p class="current-score" id="current--1">0</p>
+      </div>
+    </section>
+  </div>
+
+  <img src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Dice-1-b.svg" alt="dice" class="dice" id="dice">
+
+  <button class="btn" id="btn--new">NEW GAME</button>
+  <button class="btn" id="btn--roll">ROLL DICE</button>
+  <button class="btn" id="btn--hold">HOLD</button>
+</main>
+
+<script>
+  const score0El = document.getElementById("score--0");
+  const score1El = document.getElementById("score--1");
+  const current0El = document.getElementById("current--0");
+  const current1El = document.getElementById("current--1");
+  const player0El = document.getElementById("player--0");
+  const player1El = document.getElementById("player--1");
+  const diceEl = document.getElementById("dice");
+
+  const btnNew = document.getElementById("btn--new");
+  const btnRoll = document.getElementById("btn--roll");
+  const btnHold = document.getElementById("btn--hold");
+
+  const diceImgs = [
+    "https://upload.wikimedia.org/wikipedia/commons/1/1b/Dice-1-b.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/5/5f/Dice-2-b.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/b/b1/Dice-3-b.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/f/fd/Dice-4-b.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/0/08/Dice-5-b.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/2/26/Dice-6-b.svg"
+  ];
+
+  let scores, currentScore, activePlayer, playing;
+
+  function init() {
+    scores = [0, 0];
+    currentScore = 0;
+    activePlayer = 0;
+    playing = true;
+
+    score0El.textContent = 0;
+    score1El.textContent = 0;
+    current0El.textContent = 0;
+    current1El.textContent = 0;
+
+    diceEl.src = diceImgs[0];
+    diceEl.style.display = "block";
+
+    player0El.classList.add("player--active");
+    player1El.classList.remove("player--active");
+    player0El.classList.remove("player--winner");
+    player1El.classList.remove("player--winner");
+
+    document.getElementById("name--0").textContent = "Player 1";
+    document.getElementById("name--1").textContent = "Player 2";
+  }
+
+  function switchPlayer() {
+    document.getElementById(`current--${activePlayer}`).textContent = 0;
+    currentScore = 0;
+    activePlayer = activePlayer === 0 ? 1 : 0;
+    player0El.classList.toggle("player--active");
+    player1El.classList.toggle("player--active");
+  }
+
+  btnRoll.addEventListener("click", function () {
+    if (!playing) return;
+
+    const dice = Math.trunc(Math.random() * 6);
+    diceEl.classList.add("roll");
+
+    setTimeout(() => {
+      diceEl.src = diceImgs[dice];
+      diceEl.classList.remove("roll");
+
+      if (dice !== 0) {
+        currentScore += dice + 1;
+        document.getElementById(`current--${activePlayer}`).textContent = currentScore;
+      } else {
+        switchPlayer();
+      }
+    }, 300);
+  });
+
+  btnHold.addEventListener("click", function () {
+    if (!playing) return;
+
+    scores[activePlayer] += currentScore;
+    document.getElementById(`score--${activePlayer}`).textContent = scores[activePlayer];
+
+    if (scores[activePlayer] >= 30) {
+      playing = false;
+      document.getElementById(`name--${activePlayer}`).textContent = '🎉 WINNER!';
+      document.getElementById(`player--${activePlayer}`).classList.add('player--winner');
+      diceEl.style.display = "none";
+    } else {
+      switchPlayer();
+    }
+  });
+
+  btnNew.addEventListener("click", init);
+
+  init();
+</script>
+
+</body>
+</html>
