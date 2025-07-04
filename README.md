@@ -33,6 +33,8 @@ A 2-player interactive game where players take turns rolling a dice to accumulat
 - Responsive UI and transitions
 
 ### 🖼️ Preview:
+![image](https://github.com/user-attachments/assets/16ff993b-9cb7-4fa1-b7ff-61ef3a8bae87)
+
 
 
 ---
